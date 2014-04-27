@@ -1085,6 +1085,12 @@
 			< 1401600 4066 >,
 			< 1497600 4066 >,
 			< 1593600 4066 >;
+		reg-names = "rcg_base";
+		/* 
+		 * If Userspace Voltage Control is disabled, change this to
+		 * <&apc_vreg_corner>;
+		 */
+		a7_cpu-supply = <&pm8226_s2>;
 	};
 
 	qcom,ocmem@fdd00000 {

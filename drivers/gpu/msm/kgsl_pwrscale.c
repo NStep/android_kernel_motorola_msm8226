@@ -429,6 +429,7 @@ int kgsl_pwrscale_init(struct device *dev, const char *governor)
 		pwrscale->freq_table[out++] = pwr->pwrlevels[i].gpu_freq;
 
 	profile->max_state = out;
+
 	/* link storage array to the devfreq profile pointer */
 	profile->freq_table = pwrscale->freq_table;
 

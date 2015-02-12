@@ -23,6 +23,8 @@
 
 static bool enable_si_ws = false;
 module_param(enable_si_ws, bool, 0644);
+static bool enable_msm_hsic_ws = false;
+module_param(enable_msm_hsic_ws, bool, 0644);
 static bool enable_wlan_rx_wake_ws = false;
 module_param(enable_wlan_rx_wake_ws, bool, 0644);
 static bool enable_wlan_ctrl_wake_ws = false;
@@ -464,6 +466,8 @@ static void wakeup_source_activate(struct wakeup_source *ws)
 	if (((!enable_wlan_rx_wake_ws && !strcmp(ws->name, "wlan_rx_wake")) ||
 		(!enable_si_ws &&
 			!strcmp(ws->name, "sensor_ind")) ||
+		(!enable_msm_hsic_ws &&
+			!strcmp(ws->name, "msm_hsic_host")) ||
 		(!enable_wlan_ctrl_wake_ws &&
 			!strcmp(ws->name, "wlan_ctrl_wake")) ||
 		(!enable_wlan_wake_ws &&

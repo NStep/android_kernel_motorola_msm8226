@@ -60,11 +60,8 @@
 #include <linux/pid.h>
 #include <linux/nsproxy.h>
 #include <linux/ptrace.h>
-<<<<<<< HEAD
 #include <linux/freezer.h>
-=======
 #include <linux/hugetlb.h>
->>>>>>> 66ccaed... v3.4.59
 
 #include <asm/futex.h>
 

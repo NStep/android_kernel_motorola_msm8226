@@ -335,12 +335,12 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 		other_file = global_page_state(NR_FILE_PAGES) -
 						global_page_state(NR_SHMEM) +
 						(si.freeswap >> 1) -
-						total_swapcache_pages();
+						total_swapcache_pages;
 		}
 #else
 		other_file = global_page_state(NR_FILE_PAGES) -
 						global_page_state(NR_SHMEM) -
-						total_swapcache_pages();
+						total_swapcache_pages;
 #endif
 	else
 		other_file = 0;

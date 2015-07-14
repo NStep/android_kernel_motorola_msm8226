@@ -420,6 +420,36 @@ static int tz_handler(struct devfreq *devfreq, unsigned int event, void *data)
 	return result;
 }
 
+static void _do_partner_event(struct work_struct *work, unsigned int event)
+{
+	struct devfreq *bus_devfreq = partner_gpu_profile->bus_devfreq;
+
+	if (bus_devfreq != NULL &&
+		bus_devfreq->governor &&
+		bus_devfreq->governor->event_handler)
+		bus_devfreq->governor->event_handler(bus_devfreq, event, NULL);
+}
+
+static void do_partner_start_event(struct work_struct *work)
+{
+	_do_partner_event(work, DEVFREQ_GOV_START);
+}
+
+static void do_partner_stop_event(struct work_struct *work)
+{
+	_do_partner_event(work, DEVFREQ_GOV_STOP);
+}
+
+static void do_partner_suspend_event(struct work_struct *work)
+{
+	_do_partner_event(work, DEVFREQ_GOV_SUSPEND);
+}
+
+static void do_partner_resume_event(struct work_struct *work)
+{
+	_do_partner_event(work, DEVFREQ_GOV_RESUME);
+}
+
 static struct devfreq_governor msm_adreno_tz = {
 	.name = "msm-adreno-tz",
 	.get_target_freq = tz_get_target_freq,

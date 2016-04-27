@@ -4246,8 +4246,7 @@ int x86_emulate_insn(struct x86_emulate_ctxt *ctxt)
 		if (rc != X86EMUL_CONTINUE)
 			goto done;
 	}
-	/* Copy full 64-bit value for CMPXCHG8B.  */
-	ctxt->dst.orig_val64 = ctxt->dst.val64;
+	ctxt->dst.orig_val = ctxt->dst.val;
 
 special_insn:
 

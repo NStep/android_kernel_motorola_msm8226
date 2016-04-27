@@ -4041,16 +4041,10 @@ static void nfs4_delegreturn_done(struct rpc_task *task, void *calldata)
 		return;
 
 	switch (task->tk_status) {
-	case 0:
-		renew_lease(data->res.server, data->timestamp);
-		break;
-	case -NFS4ERR_ADMIN_REVOKED:
-	case -NFS4ERR_DELEG_REVOKED:
-	case -NFS4ERR_BAD_STATEID:
-	case -NFS4ERR_OLD_STATEID:
 	case -NFS4ERR_STALE_STATEID:
 	case -NFS4ERR_EXPIRED:
-		task->tk_status = 0;
+	case 0:
+		renew_lease(data->res.server, data->timestamp);
 		break;
 	default:
 		if (nfs4_async_handle_error(task, data->res.server, NULL) ==

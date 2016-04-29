@@ -634,7 +634,7 @@ int __init intelli_plug_init(void)
 	queue_delayed_work_on(0, intelliplug_wq, &intelli_plug_work,
 		msecs_to_jiffies(10));
 
-	intelli_plug_perf_boost_kobj
+	/*intelli_plug_perf_boost_kobj
 		= kobject_create_and_add("intelli_plug", kernel_kobj);
 
 	if (!intelli_plug_perf_boost_kobj) {
@@ -647,7 +647,7 @@ int __init intelli_plug_init(void)
 	if (rc)
 		kobject_put(intelli_plug_perf_boost_kobj);
 
-	return 0;
+	return 0;*/
 }
 
 MODULE_AUTHOR("Paul Reioux <reioux@gmail.com>");

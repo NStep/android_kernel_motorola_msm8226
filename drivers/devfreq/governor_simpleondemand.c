@@ -172,11 +172,11 @@ static int devfreq_simple_ondemand_handler(struct devfreq *devfreq,
 	switch (event) {
 	case DEVFREQ_GOV_START:
 		devfreq_monitor_start(devfreq);
-		ret = devfreq_policy_add_files(devfreq, attr_group);
+		//ret = devfreq_policy_add_files(devfreq, attr_group);
 		break;
 
 	case DEVFREQ_GOV_STOP:
-		devfreq_policy_remove_files(devfreq, attr_group);
+		//devfreq_policy_remove_files(devfreq, attr_group);
 		devfreq_monitor_stop(devfreq);
 		break;
 

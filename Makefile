@@ -250,8 +250,8 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 
 HOSTCC       = gcc
 HOSTCXX      = g++
-HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O3 -fno-tree-vectorize -fomit-frame-pointer -std=gnu89
-HOSTCXXFLAGS = -O3 -fno-tree-vectorize -fgraphite
+HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer
+HOSTCXXFLAGS = -O2
 
 # Decide whether to build built-in, modular, or both.
 # Normally, just do built-in.
@@ -357,19 +357,14 @@ endif
 
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
-
-OPTIMIZATION_FLAGS = -mcpu=cortex-a7 -mtune=cortex-a7 \
-                     -marm -mfpu=neon-vfpv4 -mvectorize-with-neon-quad -munaligned-access \
-                     -ffast-math -fsingle-precision-constant \
-                     -fgcse-lm -fgcse-sm -fsched-spec-load -fforce-addr \
-                     -fgraphite-identity -floop-parallelize-all -ftree-loop-linear \
-                     -floop-interchange -floop-strip-mine -floop-block
-
-CFLAGS_MODULE   = -DMODULE -fno-pic $(OPTIMIZATION_FLAGS)
-AFLAGS_MODULE   = $(OPTIMIZATION_FLAGS)
-LDFLAGS_MODULE  = 
-CFLAGS_KERNEL	= $(OPTIMIZATION_FLAGS)
-AFLAGS_KERNEL	= $(OPTIMIZATION_FLAGS)
+CFLAGS_MODULE   = -DMODULE -fno-pic -mcpu=cortex-a7 \
+                  -marm -mfpu=neon-vfpv4 \
+                  -mvectorize-with-neon-quad -munaligned-access
+AFLAGS_MODULE   =
+LDFLAGS_MODULE  =
+CFLAGS_KERNEL	= -mcpu=cortex-a7 -mtune=cortex-a7 \
+                  -marm -mfpu=neon-vfpv4 -mvectorize-with-neon-quad -munaligned-access
+AFLAGS_KERNEL	=
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
 
@@ -386,7 +381,7 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common \
 		   -Wno-format-security -Wno-sizeof-pointer-memaccess \
 		   -fno-delete-null-pointer-checks \
-                   -marm -mfpu=neon-vfpv4 -fno-pic -std=gnu89
+                   -marm -mfpu=neon-vfpv4
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
@@ -579,7 +574,7 @@ all: vmlinux
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os $(call cc-disable-warning,maybe-uninitialized,)
 else
-KBUILD_CFLAGS += -O3 -fmodulo-sched -fmodulo-sched-allow-regmoves -fno-tree-vectorize -fno-inline-functions -Wno-array-bounds
+KBUILD_CFLAGS	+= -O2 $(call cc-disable-warning,maybe-uninitialized,)
 endif
 
 include $(srctree)/arch/$(SRCARCH)/Makefile

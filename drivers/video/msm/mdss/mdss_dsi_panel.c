@@ -941,7 +941,7 @@ static int mdss_dsi_panel_off(struct mdss_panel_data *pdata)
 	mipi  = &pdata->panel_info.mipi;
 
 #ifdef CONFIG_POWERSUSPEND
-	set_power_suspend_panel_state_hook(POWER_SUSPEND_ACTIVE);
+	set_power_suspend_state_panel_hook(POWER_SUSPEND_ACTIVE);
 	screen_on = false;
 #endif
 

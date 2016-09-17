@@ -250,7 +250,7 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 
 HOSTCC       = gcc
 HOSTCXX      = g++
-HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O3 -fomit-frame-pointer
+HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O3 -fomit-frame-pointer -std=gnu89
 HOSTCXXFLAGS = -O3
 
 # Decide whether to build built-in, modular, or both.
@@ -361,7 +361,7 @@ CFLAGS_MODULE   = -DMODULE -fno-pic -mcpu=cortex-a7 \
                   -marm -mfpu=neon-vfpv4 \
                   -mvectorize-with-neon-quad -munaligned-access
 AFLAGS_MODULE   =
-LDFLAGS_MODULE  =
+LDFLAGS_MODULE  = --strip-debug
 CFLAGS_KERNEL	= -mcpu=cortex-a7 -mtune=cortex-a7 \
                   -marm -mfpu=neon-vfpv4 -mvectorize-with-neon-quad -munaligned-access
 AFLAGS_KERNEL	=
@@ -375,13 +375,21 @@ LINUXINCLUDE    := -I$(srctree)/arch/$(hdr-arch)/include \
                    $(if $(KBUILD_SRC), -I$(srctree)/include) \
                    -include $(srctree)/include/linux/kconfig.h
 
+OPT_FLAGS := -pipe -munaligned-access -mfloat-abi=softfp -mfpu=neon-vfpv4 \
+	     -fmodulo-sched -fmodulo-sched-allow-regmoves -fsingle-precision-constant \
+	     -funswitch-loops -fpredictive-commoning -fgcse-after-reload \
+	     -fno-pic -Wno-unused -Wno-maybe-uninitialized -Wno-array-bounds -Wno-sizeof-array-argument -mno-android \
+	     --param l1-cache-size=16 --param l1-cache-line-size=16 --param l2-cache-size=2048 -std=gnu89
+
+
 KBUILD_CPPFLAGS := -D__KERNEL__
 
 KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common \
 		   -Wno-format-security -Wno-sizeof-pointer-memaccess \
 		   -fno-delete-null-pointer-checks \
-                   -marm -mfpu=neon-vfpv4
+                   -marm -mfpu=neon-vfpv4 \
+		   $(OPTI_FLAGS)
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
@@ -574,7 +582,7 @@ all: vmlinux
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os $(call cc-disable-warning,maybe-uninitialized,)
 else
-KBUILD_CFLAGS	+= -O3 $(call cc-disable-warning,maybe-uninitialized,)
+KBUILD_CFLAGS	+= -O3 $(call cc-disable-warning,maybe-uninitialized,) -Wno-array-bounds -Wno-shift-overflow -Wno-maybe-uninitialized
 endif
 
 include $(srctree)/arch/$(SRCARCH)/Makefile

@@ -393,45 +393,6 @@ void __ref intelli_plug_perf_boost(bool on)
 	}
 }
 
-/* sysfs interface for performance boost (BEGIN) */
-static ssize_t intelli_plug_perf_boost_store(struct kobject *kobj,
-			struct kobj_attribute *attr, const char *buf,
-			size_t count)
-{
-
-	int boost_req;
-
-	sscanf(buf, "%du", &boost_req);
-
-	switch(boost_req) {
-		case 0:
-			intelli_plug_perf_boost(0);
-			return count;
-		case 1:
-			intelli_plug_perf_boost(1);
-			return count;
-		default:
-			return -EINVAL;
-	}
-}
-
-static struct kobj_attribute intelli_plug_perf_boost_attribute =
-	__ATTR(perf_boost, 0220,
-		NULL,
-		intelli_plug_perf_boost_store);
-
-static struct attribute *intelli_plug_perf_boost_attrs[] = {
-	&intelli_plug_perf_boost_attribute.attr,
-	NULL,
-};
-
-static struct attribute_group intelli_plug_perf_boost_attr_group = {
-	.attrs = intelli_plug_perf_boost_attrs,
-};
-
-static struct kobject *intelli_plug_perf_boost_kobj;
-/* sysfs interface for performance boost (END) */
-
 #ifdef CONFIG_POWERSUSPEND
 static void intelli_plug_suspend(struct power_suspend *handler)
 #else
@@ -588,6 +549,45 @@ static struct input_handler intelli_plug_input_handler = {
 	.name           = "intelliplug_handler",
 	.id_table       = intelli_plug_ids,
 };
+
+/* sysfs interface for performance boost (BEGIN) */
+static ssize_t intelli_plug_perf_boost_store(struct kobject *kobj,
+			struct kobj_attribute *attr, const char *buf,
+			size_t count)
+{
+
+	int boost_req;
+
+	sscanf(buf, "%du", &boost_req);
+
+	switch(boost_req) {
+		case 0:
+			intelli_plug_perf_boost(0);
+			return count;
+		case 1:
+			intelli_plug_perf_boost(1);
+			return count;
+		default:
+			return -EINVAL;
+	}
+}
+
+static struct kobj_attribute intelli_plug_perf_boost_attribute =
+	__ATTR(perf_boost, 0220,
+		NULL,
+		intelli_plug_perf_boost_store);
+
+static struct attribute *intelli_plug_perf_boost_attrs[] = {
+	&intelli_plug_perf_boost_attribute.attr,
+	NULL,
+};
+
+static struct attribute_group intelli_plug_perf_boost_attr_group = {
+	.attrs = intelli_plug_perf_boost_attrs,
+};
+
+static struct kobject *intelli_plug_perf_boost_kobj;
+/* sysfs interface for performance boost (END) */
 
 int __init intelli_plug_init(void)
 {
